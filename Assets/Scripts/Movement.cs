@@ -6,8 +6,6 @@ public class Movement : MonoBehaviour {
 	public float speed = 100.0f;
 	public Vector3 liftOffset = new Vector3(0.0f, 15.0f, 0.0f);
 	
-	public GameObject gunPart;
-	
 	void Setup()
 	{
 		
@@ -52,15 +50,5 @@ public class Movement : MonoBehaviour {
 		
 	}
 	
-	void OnTriggerEnter(Collider other) {
-		Destroy(other.gameObject);
-		gunPart.renderer.enabled = false;
-		GameObject instantiated = (GameObject)Instantiate(gunPart, transform.position + new Vector3(-2.0f, 0.0f, -6.0f), gunPart.transform.rotation);
-		GameObject instantiated2 = (GameObject)Instantiate(gunPart, transform.position + new Vector3(-2.0f, 0.0f, 6.0f), gunPart.transform.rotation);
-		instantiated.renderer.enabled = true;
-		instantiated.transform.parent = transform;
-		
-		instantiated2.renderer.enabled = true;
-		instantiated2.transform.parent = transform;
-	}
+	
 }
