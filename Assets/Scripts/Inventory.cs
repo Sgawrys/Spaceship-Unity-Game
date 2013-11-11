@@ -44,14 +44,14 @@ public class Inventory : MonoBehaviour {
 			}
 		}
 		
-		if(Input.GetKeyDown(KeyCode.H)) {
+		/*if(Input.GetKeyDown(KeyCode.H)) {
 			StartCoroutine("FieldView");
 		}
 		if(visible) {
 			Camera.main.fieldOfView =  Mathf.Lerp(Camera.main.fieldOfView, 90, 0.05f);
 		}else{
 			Camera.main.fieldOfView =  Mathf.Lerp(Camera.main.fieldOfView, 179, 0.05f);
-		}
+		}*/
 	}
 	
 	void OnGUI() {
@@ -84,13 +84,19 @@ public class Inventory : MonoBehaviour {
 		GameObject item = items[randChoice];
 		
 		Description partDescription = (Description)item.GetComponent("Description");
-		partDescription.insert("test", "data");
+		//partDescription.insert("test", "data");
 		item.renderer.enabled = false;
 		
 		inventoryList.Add(item);
 		
-		GameObject ins = (GameObject)Instantiate(item, transform.position + partDescription.offset, item.transform.rotation);
+		//GameObject ins = (GameObject)Instantiate(item, transform.position + partDescription.offset, item.transform.rotation);
+		//GameObject ins2 = (GameObject)Instantiate(item, transform.position + partDescription.changeOrientation(), item.transform.rotation);
+		
+		
+		GameObject ins = (GameObject)Instantiate(item, transform.position + partDescription.offset, transform.rotation);
+		ins.transform.Rotate(new Vector3(0.0f,0.0f,90.0f));
 		GameObject ins2 = (GameObject)Instantiate(item, transform.position + partDescription.changeOrientation(), item.transform.rotation);
+		
 		
 		ins.renderer.enabled = true;
 		ins.transform.parent = transform;

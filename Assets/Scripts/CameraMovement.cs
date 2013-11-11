@@ -15,9 +15,19 @@ public class CameraMovement : MonoBehaviour {
 		
 	}
 	
+	void Update(){
+		/*if(Input.GetKeyDown(KeyCode.H)) {
+			StartCoroutine("FieldView");
+		}
+		if(visible) {
+			Camera.main.fieldOfView =  Mathf.Lerp(Camera.main.fieldOfView, 90, 0.05f);
+		}else{
+			Camera.main.fieldOfView =  Mathf.Lerp(Camera.main.fieldOfView, 179, 0.05f);
+		}*/	
+	}
 	
 	void FixedUpdate () {
-		playerTransform = player.transform.position;
-		transform.position = player.transform.position + offset ;
+		//playerTransform = player.transform.position;
+		//transform.position = player.transform.position + offset ;
 	}
 }
