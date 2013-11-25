@@ -4,7 +4,6 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 	
 	public float speed = 100.0f;
-	public float friction = 10.0f;
 	public Vector3 liftOffset = new Vector3(0.0f, 15.0f, 0.0f);
 	
 	public Vector3 mouseVecCenter;
@@ -13,7 +12,7 @@ public class Movement : MonoBehaviour {
 	void Start()
 	{
 		screenCenterVec = new Vector3(0.5f, 0.5f, 0.0f);
-		rigidbody.drag = 0.3f;
+		rigidbody.drag = 0.1f;
 	}
 	
 	void Update()
