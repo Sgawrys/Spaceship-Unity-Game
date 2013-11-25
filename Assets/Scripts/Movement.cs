@@ -50,5 +50,11 @@ public class Movement : MonoBehaviour {
 		
 	}
 	
+	void OnTriggerEnter(Collider other) {
+		if(other.tag == Tags.planets) {
+			Debug.Log ("Entering planet atmosphere");
+			//Application.LoadLevel("Planet");
+		}
+	}
 	
 }
