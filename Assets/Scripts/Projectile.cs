@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 	
-	void OnTriggerEnter(Collider objCollider){
+	void OnCollisionEnter(Collider objCollider){
 		//leave for now
 		if(!objCollider.gameObject.CompareTag("Player")){
 			Destroy(this.gameObject);		
