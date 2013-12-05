@@ -18,5 +18,6 @@ public class Tags : MonoBehaviour {
         
         public const string generated = "Generated";
         
+		public const string enemy = "Enemy";
 
 }

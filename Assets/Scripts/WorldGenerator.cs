@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using LibNoise.Unity.Generator;
+using LibNoise.Unity;
 
 public class WorldGenerator : MonoBehaviour {
 	
@@ -15,7 +17,7 @@ public class WorldGenerator : MonoBehaviour {
 	// Use this for initialization
 	void Start () { 
 		
-		texturePool = new Texture2D[5];
+		texturePool = new Texture2D[1];
 		for(int i = 0; i < texturePool.Length; i++) {
 			texturePool[i] = generateTexture();	
 		}
@@ -90,7 +92,7 @@ public class WorldGenerator : MonoBehaviour {
 	}
 	
 	Texture2D generateTexture() {
-		
+		/*
 		var texture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true);
 		
 		float[,] perlin = GeneratePerlinNoise(GenerateWhiteNoise(1024,1024), 6);
@@ -108,7 +110,6 @@ public class WorldGenerator : MonoBehaviour {
 		{
 			for(int y = 0; y < texture.height; y++)
 			{
-				
 				if(perlin[x,y] >= 0.5f) {
 					c = GetColor (color_one, color_two, perlin[x,y] - 0.5f, 0.25f);	
 				}else{
@@ -124,8 +125,14 @@ public class WorldGenerator : MonoBehaviour {
 		
 		 // Apply all SetPixel calls
 	    texture.Apply();
+		*/
+		ModuleBase mb = new Perlin();
+		//LibNoise.Unity.Gradient gradient = new LibNoise.Unity.Gradient(new Color(1.0f, 0.0f, 0.0f, 1.0f), new Color(0.0f, 1.0f, 0.0f, 1.0f));
+		Noise2D n2d = new Noise2D(256, 256, mb);
+		n2d.GenerateSpherical(0.0, 511.0, 0.0, 511.0);
+		return n2d.GetTexture(LibNoise.Unity.Gradient.Terrain);
 		
-		return texture;
+		//return texture;
 	}
 	
 	//Perlin Noise with Blending
