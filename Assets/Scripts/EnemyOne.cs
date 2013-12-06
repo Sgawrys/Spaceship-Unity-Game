@@ -10,6 +10,7 @@ public class EnemyOne : MonoBehaviour {
 	private float moveSpeed = 20;
 	private float rotationSpeed = 3;
 	private float proximityThreshold = 50;
+	private float ignorePlayerProximity = 70;
 	
 	// Use this for initialization
 	void Start () {
@@ -19,15 +20,18 @@ public class EnemyOne : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 moveVec = transform.forward + moveAwayFromEnemies()  + moveTowardPlayer();
+		Vector3 moveVec = transform.forward + moveAwayFromEnemies().normalized  + moveTowardPlayer().normalized;
 		transform.rotation = Quaternion.Slerp(transform.rotation,
 				Quaternion.LookRotation(moveVec),
 				Time.deltaTime);
-		this.rigidbody.velocity = moveVec * moveSpeed * Time.deltaTime;
+		this.rigidbody.velocity = Vector3.Lerp(this.rigidbody.velocity,
+			moveVec * moveSpeed,
+			Time.deltaTime * 100);
 	}
 	
 	private Vector3 moveTowardPlayer(){
-		if(isPlayerNear == true){
+		bool ignorePlayer = Mathf.Sqrt((transform.position - player_transform.position).sqrMagnitude) < ignorePlayerProximity;
+		if(isPlayerNear == true && !ignorePlayer){
 			//follow the player
 //			transform.rotation = Quaternion.Slerp(transform.rotation,
 //				Quaternion.LookRotation(player_transform.position - transform.position),
@@ -35,7 +39,7 @@ public class EnemyOne : MonoBehaviour {
 			return player_transform.position - transform.position;
 			//this.rigidbody.velocity = transform.forward * moveSpeed;
 		}
-		else return Vector3.zero;
+		else return Vector3.one;
 	}
 	
 	private Vector3 matchCollectiveEnemyVel(){

@@ -18,6 +18,5 @@ public class Tags : MonoBehaviour {
         public const string camera = "MainCamera";
         
         public const string generated = "Generated";
-        
 
 }

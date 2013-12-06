@@ -165,6 +165,10 @@ public class Inventory : MonoBehaviour {
             item.renderer.enabled = false;
             
             GameObject ins = (GameObject)Instantiate(item, transform.position + partDescription.offset, item.transform.rotation);
+			GameObject player  = GameObject.FindGameObjectWithTag(Tags.player);
+			
+			ins.transform.Rotate(player.transform.rotation.eulerAngles);
+			
             ins.tag = Tags.shipPartInventory;
             inventoryList.Add(ins);
             
