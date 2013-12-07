@@ -47,6 +47,7 @@
      <Compile Include="Assets\Scripts\Attack.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\Description.cs" />
+     <Compile Include="Assets\Scripts\EnemyOne.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
      <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Billow.cs" />
      <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Checker.cs" />
