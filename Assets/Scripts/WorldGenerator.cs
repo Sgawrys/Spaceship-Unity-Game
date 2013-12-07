@@ -5,27 +5,71 @@ using LibNoise.Unity;
 
 public class WorldGenerator : MonoBehaviour {
 	
+	/*Size of the universe in terms of chunks, and a 3 dimensional chunk array which stores seeds*/
 	public int size = 10;
 	public int[,,] chunks;
+	/*How big is the chunk?(In each x,y,z direction*/
+	public float CHUNK_SIZE = 10000.0f;
 	
-	public int currentChunk;
-	
+	/*Holds the various textures used by planets*/
 	public Texture2D[] texturePool; 
+	public int NUM_TEXTURES = 5;
 	
-	public float[] planetSize = {128.0f, 256.0f, 512.0f, 1024.0f};
+	/*How many planets in a solar system*/
+	public int MAX_PLANETS = 10;
+	public int MIN_PLANETS = 5;
+	
+	/*Sizes of these planets*/
+	public float[] planetSize = {128.0f, 256.0f, 512.0f, 1024.0f, 2048.0f};
+	
+	/*Used for gathering the player's current location in 3D Universe*/
+	public struct IntVector3 {
+		public int x, y, z;
+		
+		public IntVector3(int x, int y, int z) {
+			this.x = x;
+			this.y = y;
+			this.z = z;
+		}
+	}
+	
+	/*Player's current chunk*/
+	public IntVector3 player_pos;
+	
+	/*The seed of the current chunk that determines planet allocation*/
+	public int currentSeed;
 	
 	// Use this for initialization
 	void Start () { 
 		
-		texturePool = new Texture2D[1];
+		/*Generate textures for the planets to take from*/
+		texturePool = new Texture2D[NUM_TEXTURES];
 		for(int i = 0; i < texturePool.Length; i++) {
 			texturePool[i] = generateTexture();	
 		}
 		
 		Vector3 pos;
 		
-		int numPlanetsInChunk = Random.Range (10,25);
-		int currentSeed;
+		int numPlanetsInChunk = Random.Range (MIN_PLANETS, MAX_PLANETS);
+		
+		/*Seed the initial universe*/
+		chunks = new int[size, size, size];
+		for(int x = 0; x < size; x++) {
+			for(int y = 0; y < size; y++) {
+				for(int z = 0; z < size; z++) {
+					chunks[x,y,z] = (int)(Random.value * int.MaxValue);
+				}
+			}
+		}
+		
+		/*Player starts out in center of universe, which loops around when reaches end*/
+		player_pos = new IntVector3(size/2, size/2, size/2);
+		
+		
+		/*Whats the current seed?*/
+		currentSeed = chunks[player_pos.x, player_pos.y, player_pos.z];
+		
+		generatePlanetLocations(numPlanetsInChunk);
 		
 		for(int i = 0; i < numPlanetsInChunk; i++) {
 			float deltaX = Random.value;
@@ -40,7 +84,51 @@ public class WorldGenerator : MonoBehaviour {
 			createPlanet(pos);
 		}
 
-		createPlanet(new Vector3(1300.0f, 0.0f, -1100.0f));
+		//createPlanet(new Vector3(1300.0f, 0.0f, -1100.0f));
+	}
+	
+	void generatePlanetLocations(int numPlanets) {
+		/*Parameter numPlanets determines the frequency of the spheres*/
+		Spheres orbitGenerator = new Spheres(numPlanets/2);
+		ModuleBase moduleBase = orbitGenerator;
+		
+		Noise2D orbitProjection = new Noise2D(256, moduleBase);
+		orbitProjection.GeneratePlanar(Noise2D.Left, Noise2D.Right, Noise2D.Top, Noise2D.Bottom);
+		
+		/*Perlin noise for determining the height of the planet on it's orbit*/
+		Perlin heightMap = new Perlin();
+		heightMap.Seed = currentSeed;
+		moduleBase = heightMap;
+		
+		Noise2D planetaryHeightMap = new Noise2D(256, moduleBase);
+		planetaryHeightMap.GeneratePlanar(Noise2D.Left, Noise2D.Right, Noise2D.Top, Noise2D.Bottom);
+		
+		Texture2D new_tex = orbitProjection.GetTexture();
+		
+		/*How thin the orbit should be on the spheres texture*/
+		float threshold = 2.5f;
+		
+		Color[] color_array = new_tex.GetPixels();
+		/*Just for visual debugging*/
+		for(int i = 0; i < color_array.Length; i++) {
+			float total = color_array[i].r + color_array[i].g + color_array[i].b;
+			if(total >= threshold) {
+				color_array[i] = Color.red;
+			}else{
+				color_array[i] = Color.clear;
+			}
+		}
+		new_tex.SetPixels(color_array);
+		new_tex.Apply();
+		
+		/*Add the orbit plane to the scene*/
+		GameObject orbitPlane = GameObject.CreatePrimitive(PrimitiveType.Cube);
+		orbitPlane.transform.localScale = new Vector3(10000.0f, 1.0f, 10000.0f);
+		orbitPlane.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
+		orbitPlane.collider.enabled = false;
+		orbitPlane.renderer.material.shader = Shader.Find("Transparent/Diffuse");
+		orbitPlane.renderer.material.mainTexture = new_tex;
+		
 	}
 	
 	void checkNewChunk() {
@@ -126,11 +214,33 @@ public class WorldGenerator : MonoBehaviour {
 		 // Apply all SetPixel calls
 	    texture.Apply();
 		*/
-		ModuleBase mb = new Perlin();
-		//LibNoise.Unity.Gradient gradient = new LibNoise.Unity.Gradient(new Color(1.0f, 0.0f, 0.0f, 1.0f), new Color(0.0f, 1.0f, 0.0f, 1.0f));
-		Noise2D n2d = new Noise2D(256, 256, mb);
-		n2d.GenerateSpherical(0.0, 511.0, 0.0, 511.0);
-		return n2d.GetTexture(LibNoise.Unity.Gradient.Terrain);
+		Perlin perl = new Perlin();
+		perl.Seed = (int)(Random.value * int.MaxValue);
+		ModuleBase mb = perl;
+		LibNoise.Unity.Gradient.Custom.EmptyGradient();
+		
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-1.0, new Color(0.3f, 0.2f, 0.0f, 1.0f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.1, Color.red);
+		LibNoise.Unity.Gradient.Custom.AddToGradient(0.6, new Color(1.0f, 0.5f, 0.0f, 1.0f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(1.0, Color.yellow);
+		/*
+		 * Terrain
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-1.0, new Color(0, 0, 128));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.2, new Color(0.125f, 0.25f, 0.5f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.04, new Color(0.25f, 0.375f, 0.75f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.02, new Color(0.75f, 0.75f, 0.5f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(0.0, new Color(0, 0.75f, 0));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(0.25, new Color(0.75f, 0.75f, 0));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(0.5, new Color(0.625f, 0.375f, 0.25f));
+		LibNoise.Unity.Gradient.Custom.AddToGradient(0.75, new Color(0.5f, 1, 1));
+        LibNoise.Unity.Gradient.Custom.AddToGradient(1.0, Color.white);
+        */
+		Noise2D n2d = new Noise2D(128, 128, mb);
+		
+		
+		n2d.GenerateSpherical(Noise2D.South, Noise2D.North, Noise2D.West, Noise2D.East);
+		
+		return n2d.GetTexture(LibNoise.Unity.Gradient.Custom);
 		
 		//return texture;
 	}

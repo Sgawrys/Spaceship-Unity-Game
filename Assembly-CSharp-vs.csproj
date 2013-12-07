@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{5A8A6711-E5B0-7886-98F6-6A412D4D8173}</ProjectGuid>
+	<ProjectGuid>{27CF71C6-4B4B-E46B-38A9-C06759EAF61C}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -48,11 +48,50 @@
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\Description.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Billow.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Checker.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Const.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Cylinders.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Perlin.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\RidgedMultifractal.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Spheres.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Voronoi.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Gradient.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\ModuleBase.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Noise2D.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Abs.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Add.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Blend.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Cache.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Clamp.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Curve.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Displace.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Exponent.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Invert.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Max.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Min.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Multiply.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Power.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Rotate.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Scale.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\ScaleBias.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Select.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Subtract.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Terrace.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Translate.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Operator\Turbulence.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Properties\AssemblyInfo.cs" />
+     <Compile Include="Assets\Scripts\LibNoise.Unity\Utils.cs" />
+     <Compile Include="Assets\Scripts\Menu.cs" />
      <Compile Include="Assets\Scripts\Movement.cs" />
      <Compile Include="Assets\Scripts\Pickup.cs" />
      <Compile Include="Assets\Scripts\PlayerGUI.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
      <Compile Include="Assets\Scripts\Tags.cs" />
+     <Compile Include="Assets\Scripts\WorldGenerator.cs" />
+     <None Include="Assets\Scripts\LibNoise.Unity\COPYING.txt" />
+     <None Include="Assets\Scripts\LibNoise.Unity\COPYING.LESSER.txt" />
+     <None Include="Assets\Shaders\NoiseGenerator.shader" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
