@@ -1,12 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Enemy Scripts\Enemy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Enemy Scripts\EnemyOne.cs">
     <Files>
-      <File FileName="Assets\Scripts\Projectile.cs" Line="29" Column="1" />
-      <File FileName="Assets\Scripts\Enemy Scripts\Enemy.cs" Line="20" Column="2" />
-      <File FileName="Assets\Scripts\Enemy Scripts\EnemyOne.cs" Line="36" Column="3" />
-      <File FileName="Assets\Scripts\Enemy Scripts\ProjectileCollision.cs" Line="19" Column="3" />
-      <File FileName="Assets\Scripts\ParticleExplosion.cs" Line="7" Column="2" />
+      <File FileName="Assets\Scripts\Projectile.cs" Line="9" Column="25" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyOne.cs" Line="56" Column="34" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

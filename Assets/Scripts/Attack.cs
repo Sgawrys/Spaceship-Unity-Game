@@ -11,7 +11,7 @@ public class Attack : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-		laserPrefab = (GameObject)Resources.Load("Prefabs/laser_projectile");
+		laserPrefab = (GameObject)Resources.Load("Prefabs/Weapons/laser_projectile");
 	}
 	
 	// Update is called once per frame

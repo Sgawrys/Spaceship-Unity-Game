@@ -7,7 +7,7 @@ public class Projectile : MonoBehaviour {
 	public static float timeToDestroy = 5;
 	private float timeCreated;
 	public int CreatorId {get; set;}
-	private static GameObject laserPrefab = (GameObject)Resources.Load("Prefabs/laser_projectile");
+	private static GameObject laserPrefab = (GameObject)Resources.Load("Prefabs/Weapons/laser_projectile");
 	
 	// Use this for initialization
 	public void Start () {

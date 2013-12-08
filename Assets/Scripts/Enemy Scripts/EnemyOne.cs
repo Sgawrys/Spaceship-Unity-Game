@@ -20,7 +20,7 @@ public class EnemyOne : Enemy {
 		this.rigidbody.velocity = Vector3.Lerp(this.rigidbody.velocity,
 			moveVec * moveSpeed,
 			Time.deltaTime * 100);
-		ShootPlayer();
+		AttackPlayer();
 	}
 	
 	private Vector3 moveTowardPlayer(){
@@ -63,7 +63,7 @@ public class EnemyOne : Enemy {
 		return moveVector;
 	}
 	
-	private void ShootPlayer(){
+	private void AttackPlayer(){
 		if(isPlayerNear == true){
 			Vector3 vectorToPlayer = player_transform.position - transform.position;
 			float angle = Vector3.Angle(transform.forward,vectorToPlayer);
@@ -71,6 +71,9 @@ public class EnemyOne : Enemy {
 				Projectile laser = Projectile.Create(this.gameObject);
 				laser.rigidbody.AddRelativeForce(new Vector3(0.0f,0.0f,1.0f)* laserSpeed);
 				timeLastFire = Time.time;
+			}
+			else if(angle > 160 && angle < 200){
+				//drop mine
 			}
 		}
 	}
