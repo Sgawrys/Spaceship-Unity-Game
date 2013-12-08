@@ -18,7 +18,7 @@ public class Attack : MonoBehaviour {
 	void Update () {
 		//TODO: check if we are allowed to fire or not
 		if(Input.GetMouseButtonDown(0)){
-			GameObject laser = (GameObject)Instantiate(laserPrefab,transform.position,transform.rotation);
+			Projectile laser = Projectile.Create(this.gameObject);
 			laser.rigidbody.AddRelativeForce( new Vector3(1,0,0) * laserSpeed);
 		}
 	}
