@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{27CF71C6-4B4B-E46B-38A9-C06759EAF61C}</ProjectGuid>
+	<ProjectGuid>{5A8A6711-E5B0-7886-98F6-6A412D4D8173}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -47,7 +47,12 @@
      <Compile Include="Assets\Scripts\Attack.cs" />
      <Compile Include="Assets\Scripts\CameraMovement.cs" />
      <Compile Include="Assets\Scripts\Description.cs" />
-     <Compile Include="Assets\Scripts\EnemyOne.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\Enemy.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyAwareness.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyOne.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyThree.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\EnemyTwo.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\ProjectileCollision.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
      <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Billow.cs" />
      <Compile Include="Assets\Scripts\LibNoise.Unity\Generator\Checker.cs" />
@@ -85,6 +90,7 @@
      <Compile Include="Assets\Scripts\LibNoise.Unity\Utils.cs" />
      <Compile Include="Assets\Scripts\Menu.cs" />
      <Compile Include="Assets\Scripts\Movement.cs" />
+     <Compile Include="Assets\Scripts\ParticleExplosion.cs" />
      <Compile Include="Assets\Scripts\Pickup.cs" />
      <Compile Include="Assets\Scripts\PlayerGUI.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />

@@ -6,9 +6,11 @@ public class Projectile : MonoBehaviour {
 	//time to destroy projectile, in seconds
 	public static float timeToDestroy = 5;
 	private float timeCreated;
+	public int CreatorId {get; set;}
+	private static GameObject laserPrefab = (GameObject)Resources.Load("Prefabs/laser_projectile");
 	
 	// Use this for initialization
-	void Start () {
+	public void Start () {
 		timeCreated = Time.time;
 	}
 	
@@ -19,10 +21,21 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 	
+	public static Projectile Create(GameObject sourceObject){
+		GameObject newObject = Instantiate(laserPrefab,sourceObject.transform.position,sourceObject.transform.rotation) as GameObject;
+   		Projectile projectile = newObject.GetComponent<Projectile>();
+		projectile.CreatorId = sourceObject.GetInstanceID();
+		foreach(Collider collider in sourceObject.GetComponentsInChildren<Collider>()){
+			Physics.IgnoreCollision(collider,projectile.gameObject.collider);
+		}
+		return projectile;
+	}
+	
 	void OnTriggerEnter(Collider objCollider){
 		//leave for now
-		if(!objCollider.gameObject.CompareTag("Player")){
-			Destroy(this.gameObject);		
+		if(objCollider.gameObject.GetInstanceID() != CreatorId 
+			&& !objCollider.gameObject.CompareTag("SenseCollider")){
+			Destroy(this.gameObject);	
 		}
 	}
 }
