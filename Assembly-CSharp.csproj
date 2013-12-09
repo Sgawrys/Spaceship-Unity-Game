@@ -103,6 +103,7 @@
      <Compile Include="Assets\Scripts\WeaponScripts\Mine.cs" />
      <Compile Include="Assets\Scripts\WeaponScripts\MineExplosion.cs" />
      <Compile Include="Assets\Scripts\WorldGenerator.cs" />
+     <None Include="Assets\Sound\SoundEffects\readme.txt" />
      <None Include="Assets\Scripts\LibNoise.Unity\COPYING.txt" />
      <None Include="Assets\Scripts\LibNoise.Unity\COPYING.LESSER.txt" />
      <None Include="Assets\Shaders\NoiseGenerator.shader" />
