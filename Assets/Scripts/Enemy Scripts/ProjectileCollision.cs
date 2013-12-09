@@ -13,6 +13,7 @@ public class ProjectileCollision : MonoBehaviour {
 			if(enemyObject.getHealth() < 0.0f){
 				ParticleExplosion.CreateExplosion(enemyObject.transform.position);
 				//enemyObject.transform.position = new Vector3(Mathf.Infinity,Mathf.Infinity,Mathf.Infinity);
+				enemyObject.OnEnemyDestory();
 				Destroy(enemyObject.gameObject);
 			}
 		}

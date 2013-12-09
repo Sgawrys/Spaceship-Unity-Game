@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\Enemy Scripts\Enemy.cs" />
      <Compile Include="Assets\Scripts\Enemy Scripts\EnemyAwareness.cs" />
      <Compile Include="Assets\Scripts\Enemy Scripts\EnemyOne.cs" />
+     <Compile Include="Assets\Scripts\Enemy Scripts\EnemySpawner.cs" />
      <Compile Include="Assets\Scripts\Enemy Scripts\EnemyThree.cs" />
      <Compile Include="Assets\Scripts\Enemy Scripts\EnemyTwo.cs" />
      <Compile Include="Assets\Scripts\Enemy Scripts\ProjectileCollision.cs" />
@@ -95,6 +96,7 @@
      <Compile Include="Assets\Scripts\PlayerGUI.cs" />
      <Compile Include="Assets\Scripts\Projectile.cs" />
      <Compile Include="Assets\Scripts\Tags.cs" />
+     <Compile Include="Assets\Scripts\WeaponScripts\AutomaticTurret.cs" />
      <Compile Include="Assets\Scripts\WeaponScripts\Mine.cs" />
      <Compile Include="Assets\Scripts\WeaponScripts\MineExplosion.cs" />
      <Compile Include="Assets\Scripts\WorldGenerator.cs" />

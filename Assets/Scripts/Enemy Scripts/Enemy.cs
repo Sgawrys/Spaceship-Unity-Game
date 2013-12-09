@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour {
 	protected const float laserSpeed = 10000.0f;
 	
 	public Transform player_transform;
-	public Dictionary<int,GameObject> enemiesTable;
+	public Dictionary<int,Enemy> enemiesTable;
 	public bool isPlayerNear;
 	protected float fireRate = 0.5f; //laser/sec
 	protected float timeLastFire;
@@ -23,7 +23,7 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	public void Start () {
 		isPlayerNear = false;
-		enemiesTable = new Dictionary<int, GameObject>();
+		enemiesTable = new Dictionary<int, Enemy>();
 		timeLastFire = Time.time;
 	}
 	
@@ -33,5 +33,11 @@ public class Enemy : MonoBehaviour {
 	
 	public float getHealth(){
 		return health;
-	}	
+	}
+	
+	public virtual void OnEnemyDestory(){
+		foreach(KeyValuePair<int,Enemy> pair in enemiesTable){
+			pair.Value.enemiesTable.Remove(this.GetInstanceID());	
+		}
+	}
 }

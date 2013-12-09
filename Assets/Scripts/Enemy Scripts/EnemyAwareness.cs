@@ -23,9 +23,9 @@ public class EnemyAwareness : MonoBehaviour {
 		}
 		else if(other.tag == Tags.enemy){
 			int key = other.gameObject.GetInstanceID();
-			GameObject tempout;
+			Enemy tempout;
 			if(!enemyObject.enemiesTable.TryGetValue(key, out tempout)){
-				enemyObject.enemiesTable.Add(other.gameObject.GetInstanceID(),other.gameObject);		
+				enemyObject.enemiesTable.Add(other.gameObject.GetInstanceID(),other.gameObject.GetComponent<Enemy>());		
 			}
 		}
 	}

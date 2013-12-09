@@ -9,14 +9,16 @@ using System.Collections;
 public class Description : MonoBehaviour {
 	
 	/*Hashtable for additional key, value data description about the object*/
-	public Hashtable table;
+	public Hashtable table = new Hashtable();
 	
 	public Vector3 offset;
 	public Vector3 rotation;
 	public string name;
+	public float angle;
+	public float speed;
 	
 	public void Start() {
-		table = new Hashtable();	
+
 	}
 	
 	/* Used for quickly mirroring ship parts placed onto the ship*/

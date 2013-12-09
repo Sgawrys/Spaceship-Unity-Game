@@ -1,17 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Inventory.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\WeaponScripts\AutomaticTurret.cs">
     <Files>
-      <File FileName="Assets\Scripts\Enemy Scripts\EnemyOne.cs" Line="65" Column="5" />
-      <File FileName="Assets\Scripts\Projectile.cs" Line="32" Column="3" />
-      <File FileName="Assets\Scripts\Enemy Scripts\Enemy.cs" Line="7" Column="20" />
-      <File FileName="Assets\Scripts\WeaponScripts\Mine.cs" Line="22" Column="19" />
-      <File FileName="Assets\Scripts\Enemy Scripts\EnemyTwo.cs" Line="71" Column="1" />
-      <File FileName="Assets\Scripts\CameraMovement.cs" Line="17" Column="2" />
-      <File FileName="Assets\Scripts\Movement.cs" Line="50" Column="3" />
-      <File FileName="Assets\Scripts\Attack.cs" Line="22" Column="57" />
-      <File FileName="Assets\Scripts\Inventory.cs" Line="164" Column="48" />
-      <File FileName="Assets\Scripts\Description.cs" Line="14" Column="24" />
+      <File FileName="Assets\Scripts\WeaponScripts\AutomaticTurret.cs" Line="25" Column="23" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemySpawner.cs" Line="27" Column="27" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyTwo.cs" Line="56" Column="28" />
+      <File FileName="Assets\Scripts\Projectile.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyAwareness.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyOne.cs" Line="81" Column="32" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyThree.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Enemy Scripts\Enemy.cs" Line="11" Column="42" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -21,8 +19,9 @@
               <Node name="Scripts" expanded="True">
                 <Node name="Enemy Scripts" expanded="True" />
                 <Node name="LibNoise.Unity" expanded="True" />
-                <Node name="WeaponScripts" expanded="True" />
-                <Node name="Inventory.cs" selected="True" />
+                <Node name="WeaponScripts" expanded="True">
+                  <Node name="AutomaticTurret.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
           </Node>

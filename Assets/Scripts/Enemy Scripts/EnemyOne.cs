@@ -6,8 +6,14 @@ public class EnemyOne : Enemy {
 	
 	private const float shootAngleThreshold = 20.0f;
 	private const float mineDropDelay = 1.0f;
-	
+	private static GameObject enemyOnePrefab = (GameObject)Resources.Load("Prefabs/Enemy/Enemy_One/Enemy_One");
 	private float lastMineDropTime;
+	
+	public static GameObject Create(Vector3 position){
+		GameObject newObject = Instantiate(enemyOnePrefab) as GameObject;
+		newObject.transform.position = position;
+		return newObject;
+	}
 	
 	void Start () {
 		base.Start();
@@ -42,7 +48,7 @@ public class EnemyOne : Enemy {
 	private Vector3 matchCollectiveEnemyVel(){
 		Transform currTransform;
 		Vector3 moveVector = this.rigidbody.velocity + Vector3.one;
-		foreach(KeyValuePair<int,GameObject> entry in enemiesTable){
+		foreach(KeyValuePair<int,Enemy> entry in enemiesTable){
 			moveVector += entry.Value.rigidbody.velocity;
 		}
 		return moveVector/enemiesTable.Count;
@@ -53,7 +59,7 @@ public class EnemyOne : Enemy {
 		Transform currTransform;
 		Vector3 moveVector = Vector3.zero;
 		float offset;
-		foreach(KeyValuePair<int,GameObject> entry in enemiesTable){
+		foreach(KeyValuePair<int,Enemy> entry in enemiesTable){
 			//TODO: if the enemy is destroyed it is not cleared from 
 			//the list change this behaviour.
 			if(entry.Value != null){

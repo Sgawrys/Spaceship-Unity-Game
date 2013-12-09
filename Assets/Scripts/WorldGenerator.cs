@@ -10,17 +10,19 @@ public class WorldGenerator : MonoBehaviour {
 	public int[,,] chunks;
 	/*How big is the chunk?(In each x,y,z direction*/
 	public float CHUNK_SIZE = 10000.0f;
+	public float QUADRANT_SIZE = 5000.0f;
 	
 	/*Holds the various textures used by planets*/
 	public Texture2D[] texturePool; 
+	public Noise2D[] noisePool;
 	public int NUM_TEXTURES = 5;
 	
 	/*How many planets in a solar system*/
-	public int MAX_PLANETS = 10;
-	public int MIN_PLANETS = 5;
+	public int MAX_PLANETS = 15;
+	public int MIN_PLANETS = 10;
 	
 	/*Sizes of these planets*/
-	public float[] planetSize = {128.0f, 256.0f, 512.0f, 1024.0f, 2048.0f};
+	public float[] planetSize;
 	
 	/*Used for gathering the player's current location in 3D Universe*/
 	public struct IntVector3 {
@@ -41,11 +43,16 @@ public class WorldGenerator : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () { 
-		
+		planetSize = new float[4];
+		planetSize [0] = 128.0f;
+		planetSize [1] = 256.0f;
+		planetSize [2] = 512.0f;
+		planetSize [3] = 1024.0f;
 		/*Generate textures for the planets to take from*/
-		texturePool = new Texture2D[NUM_TEXTURES];
-		for(int i = 0; i < texturePool.Length; i++) {
-			texturePool[i] = generateTexture();	
+
+		noisePool = new Noise2D[NUM_TEXTURES];
+		for(int i = 0; i < noisePool.Length; i++) {
+			noisePool[i] = generateNoise();	
 		}
 		
 		Vector3 pos;
@@ -61,35 +68,30 @@ public class WorldGenerator : MonoBehaviour {
 				}
 			}
 		}
-		
 		/*Player starts out in center of universe, which loops around when reaches end*/
 		player_pos = new IntVector3(size/2, size/2, size/2);
-		
-		
+
 		/*Whats the current seed?*/
 		currentSeed = chunks[player_pos.x, player_pos.y, player_pos.z];
 		
-		generatePlanetLocations(numPlanetsInChunk);
+		Vector3[] planetLocations = generatePlanetLocations(numPlanetsInChunk);
 		
 		for(int i = 0; i < numPlanetsInChunk; i++) {
-			float deltaX = Random.value;
-			float deltaY = Random.value;
-			float deltaZ = Random.value;
-			
-			float posX = (deltaX * 10000.0f) - 5000.0f;
-			float posY = (deltaY * 10000.0f) - 5000.0f;
-			float posZ = (deltaZ * 10000.0f) - 5000.0f;
-			
-			pos = new Vector3(posX,posY,posZ);
-			createPlanet(pos);
+			createPlanet(planetLocations[i]);
 		}
 
 		//createPlanet(new Vector3(1300.0f, 0.0f, -1100.0f));
 	}
 	
-	void generatePlanetLocations(int numPlanets) {
+	Vector3[] generatePlanetLocations(int numPlanets) {
+
+		Vector3[] planetLocations = new Vector3[numPlanets];
+
+		/*Sun always in the middle of the solar system*/
+		planetLocations [0] = new Vector3 (0.0f, -2000.0f, 0.0f);
+
 		/*Parameter numPlanets determines the frequency of the spheres*/
-		Spheres orbitGenerator = new Spheres(numPlanets/2);
+		Spheres orbitGenerator = new Spheres(numPlanets);
 		ModuleBase moduleBase = orbitGenerator;
 		
 		Noise2D orbitProjection = new Noise2D(256, moduleBase);
@@ -102,67 +104,90 @@ public class WorldGenerator : MonoBehaviour {
 		
 		Noise2D planetaryHeightMap = new Noise2D(256, moduleBase);
 		planetaryHeightMap.GeneratePlanar(Noise2D.Left, Noise2D.Right, Noise2D.Top, Noise2D.Bottom);
-		
-		Texture2D new_tex = orbitProjection.GetTexture();
-		
-		/*How thin the orbit should be on the spheres texture*/
-		float threshold = 2.5f;
-		
-		Color[] color_array = new_tex.GetPixels();
-		/*Just for visual debugging*/
-		for(int i = 0; i < color_array.Length; i++) {
-			float total = color_array[i].r + color_array[i].g + color_array[i].b;
-			if(total >= threshold) {
-				color_array[i] = Color.red;
-			}else{
-				color_array[i] = Color.clear;
-			}
+
+		float offset = QUADRANT_SIZE / numPlanets;
+		float x = 0.0f;
+		float z = 0.0f;
+
+		int ratio = (int)(QUADRANT_SIZE / 256.0f);
+		for (int i = 1; i < planetLocations.Length; i++) {
+			x+= offset;
+			z+= offset;
+
+			int xPos = (int)(x/ratio);
+			int zPos = (int)(z/ratio);
+
+			planetLocations[i] = new Vector3(x, planetaryHeightMap[xPos,zPos] * QUADRANT_SIZE, z);
 		}
-		new_tex.SetPixels(color_array);
-		new_tex.Apply();
-		
-		/*Add the orbit plane to the scene*/
-		GameObject orbitPlane = GameObject.CreatePrimitive(PrimitiveType.Cube);
-		orbitPlane.transform.localScale = new Vector3(10000.0f, 1.0f, 10000.0f);
-		orbitPlane.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
-		orbitPlane.collider.enabled = false;
-		orbitPlane.renderer.material.shader = Shader.Find("Transparent/Diffuse");
-		orbitPlane.renderer.material.mainTexture = new_tex;
-		
+		return planetLocations;
 	}
 	
 	void checkNewChunk() {
 		GameObject player = GameObject.FindGameObjectWithTag(Tags.player);
-		if(Mathf.Abs(player.transform.position.x) >= 5000.0f || Mathf.Abs(player.transform.position.y) >= 5000.0f || Mathf.Abs(player.transform.position.y) >= 5000.0f) {
+		if(Mathf.Abs(player.transform.position.x) >= QUADRANT_SIZE || Mathf.Abs(player.transform.position.y) >= QUADRANT_SIZE || Mathf.Abs(player.transform.position.z) >= QUADRANT_SIZE) {
+
+			if(player.transform.position.x >= QUADRANT_SIZE) {
+				player_pos.x++;
+			}
+
+			if(player.transform.position.y >= QUADRANT_SIZE) {
+				player_pos.y++;
+			}
+
+			if(player.transform.position.z >= QUADRANT_SIZE) {
+				player_pos.z++;
+			}
+
+			if(player.transform.position.x <= -QUADRANT_SIZE) {
+				player_pos.x--;
+			}
+			
+			if(player.transform.position.y <= -QUADRANT_SIZE) {
+				player_pos.y--;
+			}
+			
+			if(player.transform.position.z <= -QUADRANT_SIZE) {
+				player_pos.z--;
+			}
+
 			player.transform.position = new Vector3(0.0f, 0.0f, 0.0f);
 			
 			GameObject[] destroy = GameObject.FindGameObjectsWithTag(Tags.planets);
 			foreach(GameObject go in destroy) {
 				Destroy(go);	
 			}
+
+			/*Player starts out in center of universe, which loops around when reaches end*/
+			player_pos = new IntVector3(size/2, size/2, size/2);
+			int numPlanetsInChunk = Random.Range (MIN_PLANETS, MAX_PLANETS);
 			
-			Vector3 pos;
+			/*Whats the current seed?*/
+			currentSeed = chunks[player_pos.x, player_pos.y, player_pos.z];
 			
-			int numPlanetsInChunk = Random.Range (20,35);
-			int currentSeed;
+			Vector3[] planetLocations = generatePlanetLocations(numPlanetsInChunk);
 			
 			for(int i = 0; i < numPlanetsInChunk; i++) {
-				float deltaX = Random.value;
-				float deltaY = Random.value;
-				float deltaZ = Random.value;
-				
-				float posX = (deltaX * 10000.0f) - 5000.0f;
-				float posY = (deltaY * 10000.0f) - 5000.0f;
-				float posZ = (deltaZ * 10000.0f) - 5000.0f;
-				
-				pos = new Vector3(posX,posY,posZ);
-				createPlanet(pos);
+				createPlanet(planetLocations[i]);
 			}
+
 		}	
 	}
 	
 	void Update()	{ 
 		checkNewChunk();
+
+		GameObject[] planets = GameObject.FindGameObjectsWithTag (Tags.planets);
+		foreach (GameObject planet in planets) {
+			StartCoroutine("RotateAroundSun", planet);
+		}
+	}
+
+	IEnumerator RotateAroundSun(GameObject planet) {
+		Description planetDesc = (Description)planet.GetComponent ("Description");
+
+		planet.transform.RotateAround(Vector3.zero, Vector3.up, Time.deltaTime);
+		planet.transform.RotateAround(Vector3.zero, planet.transform.up, planetDesc.speed * Time.deltaTime);
+		yield return new WaitForSeconds(0.1f);
 	}
 	
 	void createPlanet(Vector3 position) {
@@ -175,194 +200,53 @@ public class WorldGenerator : MonoBehaviour {
 		
 		planet.tag = Tags.planets;
 		planet.transform.parent = GameObject.FindGameObjectWithTag(Tags.generated).transform;
+		planet.transform.Rotate (new Vector3 ((180 * Random.value) + 180.0f, 360.0f * Random.value, (180 * Random.value) + 180.0f));
+		planet.transform.RotateAround (Vector3.zero, Vector3.up, 360.0f * Random.value);
 		planet.collider.isTrigger = true;
-		planet.renderer.material.mainTexture = texturePool[Random.Range(0,texturePool.Length)];
+
+		Noise2D randomNoise = noisePool[Random.Range(0,noisePool.Length)];
+		generateGradient ();
+		Texture2D planetTexture = randomNoise.GetTexture (LibNoise.Unity.Gradient.Custom);
+
+		planet.renderer.material.mainTexture = planetTexture;
+
+		Description planetDescription = (Description)planet.AddComponent("Description");
+		planetDescription.table = new Hashtable ();
+		planetDescription.angle = 360.0f * Random.value;
+		planetDescription.speed = 10.0f * Random.value;
 	}
 	
-	Texture2D generateTexture() {
-		/*
-		var texture = new Texture2D(1024, 1024, TextureFormat.ARGB32, true);
-		
-		float[,] perlin = GeneratePerlinNoise(GenerateWhiteNoise(1024,1024), 6);
-		
-		Color[] pix = new Color[texture.width * texture.height];
-		
-		Color c;
-		
-		Color color_one = new Color(Random.value, Random.value, Random.value, 1.0f);
-		Color color_two = new Color(Random.value, Random.value, Random.value, 1.0f);
-		Color color_three = new Color(Random.value, Random.value, Random.value, 1.0f);
-		Color color_four = new Color(Random.value, Random.value, Random.value, 1.0f);
-		
-		for(int x = 0; x < texture.width; x++)
-		{
-			for(int y = 0; y < texture.height; y++)
-			{
-				if(perlin[x,y] >= 0.5f) {
-					c = GetColor (color_one, color_two, perlin[x,y] - 0.5f, 0.25f);	
-				}else{
-					c = GetColor(color_three, color_four, perlin[x,y], 0.7f);
-				}
-				
-				int pos = (int)(x * (texture.height-1) + y);
-				pix[pos] = c;
-			}
-		}
-		
-		texture.SetPixels(pix);
-		
-		 // Apply all SetPixel calls
-	    texture.Apply();
-		*/
+	Noise2D generateNoise() {
 		Perlin perl = new Perlin();
 		perl.Seed = (int)(Random.value * int.MaxValue);
 		ModuleBase mb = perl;
+
+		Noise2D n2d = new Noise2D(256, 256, mb);
+
+		n2d.GenerateSpherical(Noise2D.South, Noise2D.North, Noise2D.West, Noise2D.East);
+
+		return n2d;
+	}
+
+	void generateGradient() {
 		LibNoise.Unity.Gradient.Custom.EmptyGradient();
 		
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-1.0, new Color(0.3f, 0.2f, 0.0f, 1.0f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.1, Color.red);
-		LibNoise.Unity.Gradient.Custom.AddToGradient(0.6, new Color(1.0f, 0.5f, 0.0f, 1.0f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(1.0, Color.yellow);
-		/*
-		 * Terrain
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-1.0, new Color(0, 0, 128));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.2, new Color(0.125f, 0.25f, 0.5f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.04, new Color(0.25f, 0.375f, 0.75f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(-0.02, new Color(0.75f, 0.75f, 0.5f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(0.0, new Color(0, 0.75f, 0));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(0.25, new Color(0.75f, 0.75f, 0));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(0.5, new Color(0.625f, 0.375f, 0.25f));
-		LibNoise.Unity.Gradient.Custom.AddToGradient(0.75, new Color(0.5f, 1, 1));
-        LibNoise.Unity.Gradient.Custom.AddToGradient(1.0, Color.white);
-        */
-		Noise2D n2d = new Noise2D(128, 128, mb);
+		Color initial = new Color (Random.value, Random.value, Random.value, 1.0f);
 		
-		
-		n2d.GenerateSpherical(Noise2D.South, Noise2D.North, Noise2D.West, Noise2D.East);
-		
-		return n2d.GetTexture(LibNoise.Unity.Gradient.Custom);
-		
-		//return texture;
-	}
-	
-	//Perlin Noise with Blending
-	
-	float[,] GenerateWhiteNoise(int width, int height)
-	{
-	    float[,] noise = new float[width, height];
-	    for (int i = 0; i < width; i++)
-	    {
-	        for (int j = 0; j < height; j++)
-	        {
-	            noise[i,j] = ((float)Random.value) % 1;
-	        }
-	    }
-	    return noise;
-	}
-	
-	float[,] GenerateSmoothNoise(float[,] baseNoise, int octave)
-	{
-	   int width = 1024;
-	   int height = 1024;
-	 
-	   float[,] smoothNoise = new float[width, height];
-	 
-	   int samplePeriod = 1 << octave; // calculates 2 ^ k
-	   float sampleFrequency = 1.0f / samplePeriod;
-	 
-	   for (int i = 0; i < width; i++)
-	   {
-	      //calculate the horizontal sampling indices
-	      int sample_i0 = (i / samplePeriod) * samplePeriod;
-	      int sample_i1 = (sample_i0 + samplePeriod) % width; //wrap around
-	      float horizontal_blend = (i - sample_i0) * sampleFrequency;
-	 
-	      for (int j = 0; j < height; j++)
-	      {
-	         //calculate the vertical sampling indices
-	         int sample_j0 = (j / samplePeriod) * samplePeriod;
-	         int sample_j1 = (sample_j0 + samplePeriod) % height; //wrap around
-	         float vertical_blend = (j - sample_j0) * sampleFrequency;
-	 
-	         //blend the top two corners
-	         float top = Interpolate(baseNoise[sample_i0,sample_j0],
-	            baseNoise[sample_i1,sample_j0], horizontal_blend);
-	 
-	         //blend the bottom two corners
-	         float bottom = Interpolate(baseNoise[sample_i0,sample_j1],
-	            baseNoise[sample_i1,sample_j1], horizontal_blend);
-	 
-	         //final blend
-	         smoothNoise[i,j] = Interpolate(top, bottom, vertical_blend);
-	      }
-	   }
-	 
-	   return smoothNoise;
-	}
-	
-	float Interpolate(float x0, float x1, float alpha)
-	{
-	   return (x0 * (1 - alpha)) + (alpha * x1);
-	}
-	
-	float[,] GeneratePerlinNoise(float[,] baseNoise, int octaveCount)
-	{
-	   int width = 1024;
-	   int height = 1024;
-	 
-	   float[][,] smoothNoise = new float[octaveCount][,]; //an array of 2D arrays containing
-	 
-	   float persistance = 0.9f;
-	 
-	   //generate smooth noise
-	   for (int i = 0; i < octaveCount; i++)
-	   {
-	       smoothNoise[i] = GenerateSmoothNoise(baseNoise, i);
-	   }
-	 
-	    float[,] perlinNoise = new float[width, height];
-	    float amplitude = 1.0f;
-	    float totalAmplitude = 0.0f;
-	 
-	    //blend noise together
-	    for (int octave = octaveCount - 1; octave >= 0; octave--)
-	    {
-	       amplitude *= persistance;
-	       totalAmplitude += amplitude;
-	 
-	       for (int i = 0; i < width; i++)
-	       {
-	          for (int j = 0; j < height; j++)
-	          {
-	             perlinNoise[i,j] += smoothNoise[octave][i,j] * amplitude;
-	          }
-	       }
-	    }
-	 
-	   //normalisation
-		Debug.Log(totalAmplitude);
-	   for (int i = 0; i < width; i++)
-	   {
-	      for (int j = 0; j < height; j++)
-	      {
-	         perlinNoise[i,j] /= totalAmplitude;
-	      }
+		for (double i = -1.0; i <= 1.0; i+= 0.2) {
+			LibNoise.Unity.Gradient.Custom.AddToGradient(i, initial);
+			initial = randomOffset(initial);
 		}
-		
-	   return perlinNoise;
 	}
-	
-	Color GetColor(Color gradientStart, Color gradientEnd, float t, float range) {
-		t = t/range;
-		
-		float u = 1 - t;
-		
-		float rc = gradientStart.r * u + gradientEnd.r * t;
-		float gc = gradientStart.g * u + gradientEnd.g * t;
-		float bc = gradientStart.b * u + gradientEnd.b * t;
-		
-		Color color = new Color(rc, gc, bc, 1.0f);
-		
-		return color;
+
+	Color randomOffset(Color color) {
+		float offset = Random.value;
+		Color newColor = new Color();
+		newColor.r = (color.r + offset) % 1.0f;
+		newColor.g = (color.g + offset) % 1.0f;
+		newColor.b = (color.b + offset) % 1.0f;
+		newColor.a = 1.0f;
+		return newColor;
 	}
+
 }
