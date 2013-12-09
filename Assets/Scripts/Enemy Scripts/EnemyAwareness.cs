@@ -20,12 +20,13 @@ public class EnemyAwareness : MonoBehaviour {
 			//The player is in sight
 			enemyObject.isPlayerNear = true;
 			enemyObject.player_transform = other.transform;
+			enemyObject.player_body = other.rigidbody;
 		}
 		else if(other.tag == Tags.enemy){
 			int key = other.gameObject.GetInstanceID();
-			GameObject tempout;
+			Enemy tempout;
 			if(!enemyObject.enemiesTable.TryGetValue(key, out tempout)){
-				enemyObject.enemiesTable.Add(other.gameObject.GetInstanceID(),other.gameObject);		
+				enemyObject.enemiesTable.Add(other.gameObject.GetInstanceID(),other.gameObject.GetComponent<Enemy>());		
 			}
 		}
 	}

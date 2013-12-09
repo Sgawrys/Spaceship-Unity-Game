@@ -8,6 +8,7 @@ public class Movement : MonoBehaviour {
 	
 	public Vector3 mouseVecCenter;
 	public Vector3 screenCenterVec;
+	public static bool IsEnemyAttached {get;set;}
 	
 	void Start()
 	{
