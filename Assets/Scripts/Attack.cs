@@ -19,7 +19,7 @@ public class Attack : MonoBehaviour {
 		//TODO: check if we are allowed to fire or not
 		if(Input.GetMouseButtonDown(0)){
 			Projectile laser = Projectile.Create(this.gameObject);
-			laser.rigidbody.AddRelativeForce( new Vector3(1,0,0) * laserSpeed);
+			laser.rigidbody.AddRelativeForce( (new Vector3(0,0,1)) * laserSpeed);
 		}
 	}
 }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class Enemy : MonoBehaviour {
 	
 	protected const float moveSpeed = 40;
-	protected const float avoidSpeed = 10;
+	protected const float avoidSpeed = 20;
 	protected const float rotationSpeed = 3;
 	protected const float proximityThreshold = 50;
 	protected const float laserSpeed = 10000.0f;

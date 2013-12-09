@@ -164,16 +164,18 @@ public class Inventory : MonoBehaviour {
             Description partDescription = (Description)item.GetComponent("Description");
             item.renderer.enabled = false;
             
-            GameObject ins = (GameObject)Instantiate(item, transform.position + partDescription.offset, item.transform.rotation);
+            GameObject ins = (GameObject)Instantiate(item);
 			GameObject player  = GameObject.FindGameObjectWithTag(Tags.player);
 			
-			ins.transform.Rotate(player.transform.rotation.eulerAngles);
+			//ins.transform.Rotate(player.transform.rotation.eulerAngles);
 			
             ins.tag = Tags.shipPartInventory;
             inventoryList.Add(ins);
             
             ins.renderer.enabled = true;
-            ins.transform.parent = transform;
+            ins.transform.parent = player.transform;
+			ins.transform.rotation = Quaternion.Euler(partDescription.rotation);
+			ins.transform.position = new Vector3(0.5f,0.5f,0.5f);
         }
     }
         

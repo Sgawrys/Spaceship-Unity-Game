@@ -5,10 +5,14 @@ using System.Collections.Generic;
 public class EnemyOne : Enemy {
 	
 	private const float shootAngleThreshold = 20.0f;
+	private const float mineDropDelay = 1.0f;
+	
+	private float lastMineDropTime;
 	
 	void Start () {
 		base.Start();
 		ignorePlayerProximity = 80;
+		lastMineDropTime = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -30,7 +34,7 @@ public class EnemyOne : Enemy {
 			if(!ignorePlayer){
 				return vectorToPlayer;
 			}
-			return -vectorToPlayer/4 * avoidSpeed;
+			return -vectorToPlayer * avoidSpeed;
 		}
 		return Vector3.zero;
 	}
@@ -72,8 +76,12 @@ public class EnemyOne : Enemy {
 				laser.rigidbody.AddRelativeForce(new Vector3(0.0f,0.0f,1.0f)* laserSpeed);
 				timeLastFire = Time.time;
 			}
-			else if(angle > 160 && angle < 200){
+			else if((Time.time > lastMineDropTime + mineDropDelay) 
+				&& (angle > 160) 
+				&& (angle < 200)){
 				//drop mine
+				Mine.Create(this.gameObject);
+				lastMineDropTime = Time.time;
 			}
 		}
 	}

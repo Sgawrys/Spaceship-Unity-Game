@@ -31,11 +31,12 @@ public class Movement : MonoBehaviour {
 		mouseVecCenter.y = (Input.mousePosition.y/Screen.height) - screenCenterVec.y;
 		
 		//transform.Rotate(0,10.0f,0);
-		transform.Rotate(0,-mouseVecCenter.y,mouseVecCenter.x);
+		transform.Rotate(-mouseVecCenter.y, mouseVecCenter.x,0);
 		
 		
 		//Vector3 movement = new Vector3(moveVertical, 0.0f, -moveHorizontal);
-		Vector3 movement = new Vector3(moveVertical, moveHorizontal, mouseVecCenter.y * moveVertical);
+		//Vector3 movement = new Vector3(moveVertical, moveHorizontal, mouseVecCenter.y * moveVertical);
+		Vector3 movement = new Vector3(moveHorizontal, mouseVecCenter.y * moveVertical, moveVertical);
 		
 		//TODO: Remove the camera from the player so we could use these easing
 		//		turn effects.
