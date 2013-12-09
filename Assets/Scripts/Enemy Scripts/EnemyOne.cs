@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class EnemyOne : Enemy {
 	
 	private const float shootAngleThreshold = 20.0f;
-	private const float mineDropDelay = 1.0f;
+	private const float mineDropDelay = 5.0f;
 	private static GameObject enemyOnePrefab = (GameObject)Resources.Load("Prefabs/Enemy/Enemy_One/Enemy_One");
 	private float lastMineDropTime;
 	

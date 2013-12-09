@@ -25,7 +25,7 @@ public class EnemyTwo : Enemy {
 			Vector3 moveVec = Vector3.forward + moveAwayFromEnemies().normalized  + moveTowardPlayer().normalized;
 			this.rigidbody.velocity = Vector3.Lerp(this.rigidbody.velocity,
 				moveVec * moveSpeed,
-				Time.deltaTime * 100);
+				Time.deltaTime);
 			AttackPlayer();
 		}
 		else {
