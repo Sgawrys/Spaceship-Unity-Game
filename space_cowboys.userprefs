@@ -1,6 +1,18 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Inventory.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyOne.cs" Line="65" Column="5" />
+      <File FileName="Assets\Scripts\Projectile.cs" Line="32" Column="3" />
+      <File FileName="Assets\Scripts\Enemy Scripts\Enemy.cs" Line="7" Column="20" />
+      <File FileName="Assets\Scripts\WeaponScripts\Mine.cs" Line="22" Column="19" />
+      <File FileName="Assets\Scripts\Enemy Scripts\EnemyTwo.cs" Line="71" Column="1" />
+      <File FileName="Assets\Scripts\CameraMovement.cs" Line="17" Column="2" />
+      <File FileName="Assets\Scripts\Movement.cs" Line="50" Column="3" />
+      <File FileName="Assets\Scripts\Attack.cs" Line="22" Column="57" />
+      <File FileName="Assets\Scripts\Inventory.cs" Line="164" Column="48" />
+      <File FileName="Assets\Scripts\Description.cs" Line="14" Column="24" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
@@ -9,12 +21,19 @@
               <Node name="Scripts" expanded="True">
                 <Node name="Enemy Scripts" expanded="True" />
                 <Node name="LibNoise.Unity" expanded="True" />
-                <Node name="WeaponScripts" expanded="True">
-                  <Node name="Mine.cs" selected="True" />
-                </Node>
+                <Node name="WeaponScripts" expanded="True" />
+                <Node name="Inventory.cs" selected="True" />
               </Node>
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="ClassPad">
+        <State expanded="True" selected="True" />
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>transform</Value>
         </State>
       </Pad>
     </Pads>
@@ -22,5 +41,7 @@
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Assets\Scripts\Inventory.cs" line="178" offsetX="64" offsetY="3699" expression="transform" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

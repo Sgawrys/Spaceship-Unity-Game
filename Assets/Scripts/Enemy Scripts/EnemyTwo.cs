@@ -13,11 +13,20 @@ public class EnemyTwo : Enemy {
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 moveVec = moveAwayFromEnemies().normalized  + moveTowardPlayer().normalized;
-		this.rigidbody.velocity = Vector3.Lerp(this.rigidbody.velocity,
-			moveVec * moveSpeed,
-			Time.deltaTime * 100);
-		AttackPlayer();
+		if(!isAttachedToPlayer){	
+			Vector3 moveVec = moveAwayFromEnemies().normalized  + moveTowardPlayer().normalized;
+			this.rigidbody.velocity = Vector3.Lerp(this.rigidbody.velocity,
+				moveVec * moveSpeed,
+				Time.deltaTime * 100);
+			AttackPlayer();
+		}
+		else{
+			this.transform.rotation = player_transform.rotation;
+			this.transform.position = new Vector3(
+				player_transform.transform.position.x, 
+				player_transform.transform.position.y + 10.0f, 
+				player_transform.transform.position.z);
+		}
 	}
 	
 	private Vector3 moveTowardPlayer(){
@@ -69,6 +78,7 @@ public class EnemyTwo : Enemy {
 	void OnCollisionEnter(Collision collision){
 		if(collision.gameObject.CompareTag("Player")){
 			isAttachedToPlayer = true;
+			Physics.IgnoreCollision(player_transform.collider,this.transform.collider);
 		}
 	}
 }
